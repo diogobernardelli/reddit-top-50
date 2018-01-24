@@ -11,7 +11,6 @@ $ git clone https://github.com/diogobernardelli/reddit-top-50.git
 
 ## Dependencies
 
-- Git e Git Flow
 **Linux systems**
 ```bash
 $ sudo apt-get install git-flow
@@ -22,7 +21,7 @@ $ git flow init
 $ brew install git-flow
 $ git flow init
 ```
-*If you do not have Homebrew installed on your workspace, install it through [this link](https://brew.sh/).*
+*If you don't have **Homebrew** installed on your workspace, install it through [this link](https://brew.sh/).*
 
 ## Build Setup
 

@@ -1,13 +1,19 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
+    <SideList/>
+    <p>{{ $t("message.hello") }}</p>
     <router-view/>
   </div>
 </template>
 
 <script>
+
+import SideList from '@/components/SideList';
+
 export default {
   name: 'App',
+  components: { SideList },
 };
 </script>
 
