@@ -1,19 +1,20 @@
+<link rel="icon" href="https://www.deviget.com/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="https://www.deviget.com/favicon.ico" />
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <SideList/>
-    <p>{{ $t("message.hello") }}</p>
-    <router-view/>
+    <PostContent/>
   </div>
 </template>
 
 <script>
 
 import SideList from '@/components/SideList';
+import PostContent from '@/components/PostContent';
 
 export default {
   name: 'App',
-  components: { SideList },
+  components: { SideList, PostContent },
 };
 </script>
 
@@ -24,6 +25,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  /*align-items: stretch;*/
+  height: 100vh;
+  overflow: hidden;
 }
 </style>
