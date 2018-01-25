@@ -5,15 +5,11 @@
     </div>
 
     <ul class="list-unstyled components">
-      <li v-for="item in post_list">
-        <!-- {{ item }} -->
+      <li v-for="item in paginate">
         <div class="new-post"></div>
         <div class="image-column">
           <div class="post-image">
             <img v-bind:src="item.data.thumbnail" alt="">
-            <!-- <img v-bind:src="item.data.preview" alt=""> -->
-
-            <!-- {{ item.data.preview.images[0].source.url }} -->
           </div>
           <a href="javascript:;" class="dismiss-single">
             {{ $t("sidebar.dismiss_single") }}
@@ -40,13 +36,20 @@
             </div>
           </div>
         </div>
-        <!-- <a v-bind:href="item.data.permalink" target="_blank" >link aqui</a> -->
       </li>
+        <!-- <a v-bind:href="item.data.permalink" target="_blank" >link aqui</a> -->
     </ul>
 
-    <a href="javascript:;" class="dismiss-all">
-      {{ $t("sidebar.dismiss_all") }}
-    </a>
+    <div class="row">
+      <div class="paginate">
+          <p v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage) < 3 || pageNumber == totalPages || pageNumber == 1">
+          <a v-bind:key="pageNumber" href="#" @click="setPage(pageNumber)" :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }}</a>
+          </p>
+      </div>
+      <a href="javascript:;" class="dismiss-all">
+        {{ $t("sidebar.dismiss_all") }}
+      </a>
+    </div>
   </nav>
 </template>
 
@@ -54,6 +57,21 @@
 
 export default {
   name: 'SideList',
+
+  data: function () {
+    return {
+      searchKey: '',
+      currentPage: 1,
+      itemsPerPage: 10,
+      resultCount: 0
+    }
+  },
+  methods: {
+      setPage: function(pageNumber) {
+        this.currentPage = pageNumber
+      }
+  },
+
   asyncComputed: {
     post_list() {
       return new Promise((resolve) => {
@@ -63,6 +81,21 @@ export default {
         });
       });
     },
+
+    totalPages: function() {
+      return Math.ceil(this.resultCount / this.itemsPerPage)
+    },
+    paginate: function() {
+      if (!this.post_list || this.post_list.length != this.post_list.length) {
+          return
+      }
+      this.resultCount = this.post_list.length
+      if (this.currentPage >= this.totalPages) {
+        this.currentPage = this.totalPages
+      }
+      var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
+      return this.post_list.slice(index, index + this.itemsPerPage)
+    }
   },
 };
 </script>
@@ -100,7 +133,7 @@ export default {
     box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.35);
   }
 
-  ul {
+  .list-unstyled {
     height: calc(100vh - 110px);
     overflow-y: auto;
     margin: 0;
@@ -264,16 +297,55 @@ export default {
     display: block;
     padding: 7px 0;
     bottom: 0;
-    background-color: #34495e;
-    color: #fc471e;
-    width: 100%;
-    box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.25);
+    background-color: #fc471e;
+    color: #fff;
+    width: 50%;
 
     &:hover {
       text-decoration: none;
-      background-color: #fc471e;
+      background-color: #fd7259;
       color: #fff;
     }
+  }
+}
+
+.paginate {
+  display: inline-block;
+  width: 50%;
+  padding: 0 0 0 14px;
+  text-align: left;
+  box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.25);
+
+  a {
+    display: inline-block;
+    padding: 10px 16px;
+    cursor: pointer;
+    color: #fc471e;
+    font-size: 12px;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: none;
+      background: #fc471e;
+      color: #fff;
+    }
+
+    &.first::after {
+      content:' ... '
+    }
+
+    &.last::before {
+      content:' ... '
+    }
+  }
+  .current {
+    color: #fff;
+    background: #fc471e;
+  }
+
+  p {
+    display: inline;
+    margin: 0 0 0 -1px;
   }
 }
 
