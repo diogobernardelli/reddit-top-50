@@ -19,15 +19,19 @@ export default {
 </script>
 
 <style>
+* {
+  transition: all 200ms ease-in-out;
+}
+a {
+  text-decoration: none
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   display: flex;
-  /*align-items: stretch;*/
-  height: 100vh;
+  background-color: rgb(245,245,245);
   overflow: hidden;
 }
 </style>

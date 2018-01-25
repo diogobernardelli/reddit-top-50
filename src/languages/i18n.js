@@ -5,6 +5,14 @@ Vue.use(VueI18n);
 
 const messages = {
   en: {
+    sidebar: {
+      title: 'Top 50 Reddit Posts',
+      submitted: 'submitted',
+      time: 'ago',
+      comments: 'comments',
+      dismiss_single: 'Dismiss Post',
+      dismiss_all: 'Dismiss All',
+    },
     message: {
       hello: 'hello world',
     },
@@ -17,7 +25,7 @@ const messages = {
 };
 
 const i18n = new VueI18n({
-  locale: 'pt',
+  locale: 'en',
   messages,
 });
 

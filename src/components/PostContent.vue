@@ -1,91 +1,118 @@
 <template>
   <div class="wrapper">
     <div id="content">
-        <button type="button" id="sidebarCollapse" class="navbar-btn">
+        <button type="button" class="navbar-btn">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <vue-material-icon name="favorite" :size="32"></vue-material-icon>
-        Material Design with Vue.js 2 Demo
+        <div class="title">
+          <span>Posted by <strong>washedupwornout</strong> - 25 hours ago</span>
+          <h1>Fixing a toilet leak. I took 2 trips to Home Depot, worked with a hernia, had a pain in the ass time putting the wax ring and screws on...only to install the toilet and forgetting about the door. I'm an idiot.</h1>
+        </div>
 
-        <p v-for="item in post_list">
-          {{ item }}
-        </p>
-
-        <p>{{ $t("message.hello") }}</p>
+        <img src="http://i.imgur.com/IFtsInh.jpg" alt="">
     </div>
   </div>
 </template>
 
 <script>
 $(document).ready(function () {
-    $('#sidebarCollapse').on('click', function () {
-        $('#sidebar').toggleClass('active');
-        $(this).toggleClass('active');
-    });
+  $('.navbar-btn').on('click', function () {
+    $('.sidebar').toggleClass('active');
+    $(this).toggleClass('active');
+  });
 });
 
 export default {
   name: 'PostContent',
-  asyncComputed: {
-    post_list() {
-      return new Promise((resolve) => {
-        const api = 'https://raw.githubusercontent.com/deviget/Front-end/master/top.json?token=AZCPPPAkOKtOVLvADkoOAM5koH7tK20Jks5acRHwwA%3D%3D';
-        this.axios.get(api).then((response) => {
-          resolve(response.data.data.children);
-          // console.log(response.data.data.children);
-        });
-      });
-    },
-  },
 };
 </script>
 
 <style scoped lang="scss">
+button {
+  outline: 0;
+  -moz-outline-style: none
+}
 .wrapper {
+  position: relative;
   display: block;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 20px 30px;
-  height: 100%;
+  height: 100vh;
   width: 100%;
+  float: right;
+
+  .title {
+    margin: 14px 0 0;
+
+    h1 {
+      margin: 10px 0 50px;
+      font-size: 32px;
+    }
+
+    span {
+      opacity: .8;
+      font-style: italic;
+      font-size: 14px;
+    }
+  }
+
   img {
-    width: 100px;
+    max-width: 100%;
+    max-height: calc(100vh - 300px);
   }
 }
-#sidebarCollapse {
-    width: 40px;
-    height: 40px;
-    background: #f5f5f5;
+.navbar-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 40px;
+  height: 40px;
+  background: #fc471e;
+  border: 0;
+  border-radius: 5px;
 }
 
-#sidebarCollapse span {
-    width: 80%;
-    height: 2px;
-    margin: 0 auto;
-    display: block;
-    background: #555;
-    transition: all 0.8s cubic-bezier(0.810, -0.330, 0.345, 1.375);
+.navbar-btn span {
+  width: 80%;
+  height: 2px;
+  margin: 0 auto;
+  display: block;
+  background: #fff;
+  transition: all 0.8s cubic-bezier(0.810, -0.330, 0.345, 1.375);
 }
-#sidebarCollapse span:first-of-type {
-    /* rotate first one */
-    transform: rotate(45deg) translate(2px, 2px);
+.navbar-btn span:first-of-type {
+  transform: rotate(45deg) translate(2px, 2px);
 }
-#sidebarCollapse span:nth-of-type(2) {
-    /* second one is not visible */
-    opacity: 0;
+.navbar-btn span:nth-of-type(2) {
+  opacity: 0;
 }
-#sidebarCollapse span:last-of-type {
-    /* rotate third one */
-    transform: rotate(-45deg) translate(1px, -1px);
+.navbar-btn span:last-of-type {
+  transform: rotate(-45deg) translate(1px, -1px);
 }
-#sidebarCollapse.active span {
-    /* no rotation */
-    transform: none;
-    /* all bars are visible */
-    opacity: 1;
-    margin: 5px auto;
+.navbar-btn.active span {
+  transform: none;
+  opacity: 1;
+  margin: 5px auto;
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    position: absolute;
+
+    .title {
+      h1 {
+        font-size: 24px;
+      }
+    }
+  }
+  .navbar-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+  }
 }
 </style>
