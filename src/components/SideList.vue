@@ -6,10 +6,14 @@
 
     <ul class="list-unstyled components">
       <li v-for="item in post_list">
+        <!-- {{ item }} -->
         <div class="new-post"></div>
         <div class="image-column">
           <div class="post-image">
-            <img v-bind:src="item.data.url" alt="">
+            <img v-bind:src="item.data.thumbnail" alt="">
+            <!-- <img v-bind:src="item.data.preview" alt=""> -->
+
+            <!-- {{ item.data.preview.images[0].source.url }} -->
           </div>
           <a href="javascript:;" class="dismiss-single">
             {{ $t("sidebar.dismiss_single") }}
@@ -18,9 +22,6 @@
         <div class="info">
           <div class="action">›</div>
           <div class="author">
-            <div class="thumbnail">
-              <img v-bind:src="item.data.thumbnail" alt="">
-            </div>
             {{ item.data.author }}
           </div>
           <span class="posted">
@@ -56,7 +57,7 @@ export default {
   asyncComputed: {
     post_list() {
       return new Promise((resolve) => {
-        const api = 'https://raw.githubusercontent.com/deviget/Front-end/master/top.json?token=AZCPPPAkOKtOVLvADkoOAM5koH7tK20Jks5acRHwwA%3D%3D';
+        const api = 'https://www.reddit.com/r/all/top.json?limit=50';
         this.axios.get(api).then((response) => {
           resolve(response.data.data.children);
         });
@@ -175,6 +176,10 @@ export default {
         height: 160px;
         overflow: hidden;
         margin: 15px 0 0;
+        background-image: url('../assets/no-post-image.png');
+        background-size: 80%;
+        background-repeat: no-repeat;
+        background-position: center;
         border: 1px solid rgba(255, 255, 255, .2);
 
         img {
