@@ -8,9 +8,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import i18n from './languages/i18n';
-import App from './App';
-import router from './router';
+
+import store from '@/store';
+import i18n from '@/languages/i18n';
+import App from '@/App';
+import router from '@/router';
 
 Vue.use(VueAxios, axios);
 Vue.use(AsyncComputed);
@@ -24,6 +26,7 @@ new Vue({
   el: '#app',
   i18n,
   router,
+  store,
   components: { App },
   template: '<App/>',
 });

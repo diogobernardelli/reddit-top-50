@@ -1,123 +1,101 @@
 <template>
-  <nav class="sidebar" id="sidebar">
+  <nav class="sidebar">
     <div class="sidebar-header">
         {{ $t("sidebar.title") }}
     </div>
 
-    <ul class="list-posts">
-      <transition-group name="list-complete" tag="div">
-        <li v-for="(item, index) in postList" v-on:click="selectPost(item.data.id)"
-        :key="item.data.id" :id="item.data.id">
-          <div class="new-post"></div>
-          <div class="image-column">
-            <div class="post-image">
-              <img v-bind:src="item.data.thumbnail" alt="">
-            </div>
-            <button v-on:click="dismiss(index)" class="dismiss-single">
-              {{ $t("sidebar.dismiss_single") }}
-            </button>
+    <ul class="list-unstyled components">
+      <li v-for="item in paginate">
+        <div class="new-post"></div>
+        <div class="image-column">
+          <div class="post-image">
+            <img v-bind:src="item.data.thumbnail" alt="">
           </div>
-          <div class="info">
-            <div class="action">›</div>
-            <div class="author">
-              {{ item.data.author }}
+          <a href="javascript:;" class="dismiss-single">
+            {{ $t("sidebar.dismiss_single") }}
+          </a>
+        </div>
+        <div class="info">
+          <div class="action">›</div>
+          <div class="author">
+            {{ item.data.author }}
+          </div>
+          <span class="posted">
+            {{ $t("sidebar.submitted") }} {{ item.data.created }} {{ $t("sidebar.time") }}
+          </span>
+          <strong class="title">{{ item.data.title }}</strong>
+          <div class="row">
+            <div class="score">
+              <vue-material-icon name="arrow_upward" :size="14"></vue-material-icon>
+              <vue-material-icon name="arrow_downward" :size="14"></vue-material-icon>
+              <span>{{ item.data.score }}</span>
             </div>
-            <span class="posted">
-              {{ $t("sidebar.submitted") }} {{ item.data.created }} {{ $t("sidebar.time") }}
-            </span>
-            <strong class="title">{{ item.data.title }}</strong>
-            <div class="row">
-              <div class="score">
-                <vue-material-icon name="arrow_upward" :size="14"></vue-material-icon>
-                <vue-material-icon name="arrow_downward" :size="14"></vue-material-icon>
-                <span>{{ item.data.score }}</span>
-              </div>
-              <div class="comments">
-                <vue-material-icon name="forum" :size="14"></vue-material-icon>
-                <span>{{ item.data.num_comments }} {{ $t("sidebar.comments") }}</span>
-              </div>
+            <div class="comments">
+              <vue-material-icon name="forum" :size="14"></vue-material-icon>
+              <span>{{ item.data.num_comments }} {{ $t("sidebar.comments") }}</span>
             </div>
           </div>
-        </li>
-      </transition-group>
+        </div>
+      </li>
+        <!-- <a v-bind:href="item.data.permalink" target="_blank" >link aqui</a> -->
     </ul>
 
     <div class="row">
       <div class="paginate">
-          <p v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage)
-          < 3 || pageNumber == totalPages || pageNumber == 1" :key="pageNumber">
-          <a v-bind:key="pageNumber" href="#" @click="setPage(pageNumber)"
-          :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages
-          && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 &&
-          Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }}</a>
+          <p v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage) < 3 || pageNumber == totalPages || pageNumber == 1">
+          <a v-bind:key="pageNumber" href="#" @click="setPage(pageNumber)" :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }}</a>
           </p>
       </div>
-      <button href="javascript:;" v-on:click="dismissAll" class="dismiss-all">
+      <a href="javascript:;" class="dismiss-all">
         {{ $t("sidebar.dismiss_all") }}
-      </button>
+      </a>
     </div>
   </nav>
 </template>
 
 <script>
+
 export default {
   name: 'SideList',
-  data() {
+
+  data: function () {
     return {
+      searchKey: '',
       currentPage: 1,
       itemsPerPage: 10,
-      resultCount: 0,
-    };
-  },
-  beforeMount() {
-    this.$store.commit('init');
+      resultCount: 0
+    }
   },
   methods: {
-    selectPost(id) {
-      const postItem = document.getElementById(id).getElementsByClassName('new-post')[0];
-      postItem.classList.add('checked');
+    setPage: function(pageNumber) {
+      this.currentPage = pageNumber
+    }
+  },
 
-      if (window.screen.availWidth <= 768) {
-        const actionButton = document.getElementsByClassName('navbar-btn')[0];
-        const sideBar = document.getElementById('sidebar');
-        actionButton.classList.toggle('active');
-        sideBar.classList.toggle('active');
+  asyncComputed: {
+    post_list() {
+      return new Promise((resolve) => {
+        const api = 'https://www.reddit.com/r/all/top.json?limit=50';
+        this.axios.get(api).then((response) => {
+          resolve(response.data.data.children);
+        });
+      });
+    },
+
+    totalPages: function() {
+      return Math.ceil(this.resultCount / this.itemsPerPage)
+    },
+    paginate: function() {
+      if (!this.post_list || this.post_list.length != this.post_list.length) {
+          return
       }
-    },
-    dismiss(index) {
-      this.$store.commit('dismiss', index);
-    },
-    dismissAll() {
-      this.$store.commit('dismissAll');
-    },
-    setPage(pageNumber) {
-      this.currentPage = pageNumber;
-    },
-    totalPages() {
-      return Math.ceil(this.resultCount / this.itemsPerPage);
-    },
-    paginate() {
-      const index = (this.currentPage * this.itemsPerPage) - this.itemsPerPage;
-      if (!this.postList) {
-        return;
-      }
-      this.resultCount = this.postList.length;
+      this.resultCount = this.post_list.length
       if (this.currentPage >= this.totalPages) {
-        this.currentPage = this.totalPages;
+        this.currentPage = this.totalPages
       }
-      return this.postList.slice(index, index + this.itemsPerPage);
+      var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
+      return this.post_list.slice(index, index + this.itemsPerPage);
     },
-  },
-  computed: {
-    count() {
-      return this.$store.state.count;
-    },
-    postList() {
-      return this.$store.state.postList;
-    },
-  },
-  updated() {
-    this.paginate();
   },
 };
 </script>
@@ -155,29 +133,16 @@ export default {
     box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.35);
   }
 
-  .list-posts {
+  .list-unstyled {
     height: calc(100vh - 110px);
-    padding: 0;
     overflow-y: auto;
     margin: 0;
   }
 
-  .list-complete-leave, .list-complete-enter-to {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .list-complete-enter, .list-complete-leave-to {
-    opacity: 0;
-    transform: scale(0);
-  }
-
   li {
     position: relative;
-    transition: all 300ms ease-in-out;
     float: left;
     display: block;
-    left: 0;
     width: 100%;
     text-align: left;
     padding: 0 10px;
@@ -211,12 +176,7 @@ export default {
       border-style: solid;
       border-width: 40px 40px 0 0;
       border-color: #27ae60 transparent transparent transparent;
-      opacity: 1;
       z-index: 1;
-
-      &.checked {
-        opacity: 0;
-      }
     }
 
     .image-column {
@@ -225,7 +185,7 @@ export default {
       width: 40%;
       margin: 0 10px 0 0;
 
-      .dismiss-single {
+      a {
         display: block;
         margin: 12px 0;
         text-align: center;
@@ -234,7 +194,6 @@ export default {
         font-size: 12px;
         padding: 2px 0;
         border: 1px solid #fc471e;
-        background: none;
         border-radius: 10px;
 
         &:hover {
@@ -336,12 +295,11 @@ export default {
 
   .dismiss-all {
     display: block;
-    width: 50%;
     padding: 7px 0;
     bottom: 0;
     background-color: #fc471e;
-    border: 0;
     color: #fff;
+    width: 50%;
 
     &:hover {
       text-decoration: none;
@@ -398,10 +356,6 @@ export default {
     width: 100%;
     min-width: 100%;
     max-width: 100%;
-
-    &.mobile-active {
-      margin: 0 0 0 -100%;
-    }
   }
   .sidebar.active {
     margin-left: -100%;

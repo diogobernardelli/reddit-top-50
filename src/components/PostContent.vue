@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div id="content">
-        <button type="button" class="navbar-btn">
+        <button type="button" class="navbar-btn" v-on:click="slideMenu" id="action_button">
             <span></span>
             <span></span>
             <span></span>
@@ -9,7 +9,10 @@
 
         <div class="title">
           <span>Posted by <strong>washedupwornout</strong> - 25 hours ago</span>
-          <h1>Fixing a toilet leak. I took 2 trips to Home Depot, worked with a hernia, had a pain in the ass time putting the wax ring and screws on...only to install the toilet and forgetting about the door. I'm an idiot.</h1>
+          <h1>Fixing a toilet leak. I took 2 trips to Home Depot, worked with a hernia,
+          had a pain in the ass time putting the wax ring and screws on...only to install
+        the toilet and forgetting about the door. I'm an idiot.</h1>
+        <h2>Macgyver</h2>
         </div>
 
         <img src="http://i.imgur.com/IFtsInh.jpg" alt="">
@@ -18,15 +21,16 @@
 </template>
 
 <script>
-$(document).ready(function () {
-  $('.navbar-btn').on('click', function () {
-    $('.sidebar').toggleClass('active');
-    $(this).toggleClass('active');
-  });
-});
-
 export default {
   name: 'PostContent',
+  methods: {
+    slideMenu() {
+      const actionButton = document.getElementsByClassName('navbar-btn')[0];
+      const sideBar = document.getElementById('sidebar');
+      actionButton.classList.toggle('active');
+      sideBar.classList.toggle('active');
+    },
+  },
 };
 </script>
 

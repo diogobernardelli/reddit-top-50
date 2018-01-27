@@ -48,7 +48,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 | Vuex | ✓ |
 | Vue-i18n | ✓ |
 | Axios | ✓ |
-| AsyncComputed | ✓ |
 | ESLint | ✓ |
 
 #### CSS
