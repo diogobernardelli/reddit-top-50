@@ -2,19 +2,17 @@
 <link rel="shortcut icon" href="https://www.deviget.com/favicon.ico" />
 <template>
   <div id="app">
-    <SideList/>
-    <PostContent/>
+    <PostsView/>
   </div>
 </template>
 
 <script>
 
-import SideList from '@/components/SideList';
-import PostContent from '@/components/PostContent';
+import PostsView from '@/components/PostsView';
 
 export default {
   name: 'App',
-  components: { SideList, PostContent },
+  components: { PostsView },
 };
 </script>
 
@@ -25,12 +23,13 @@ export default {
 a {
   text-decoration: none
 }
-#app {
+#app, .app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   display: flex;
+  width: 100%;
+  text-align: center;
   background-color: rgb(245,245,245);
   overflow: hidden;
 }

@@ -7,6 +7,7 @@ const store = new Vuex.Store({
   state: {
     count: 0,
     postList: [],
+    selectedPost: null,
   },
 
   mutations: {
@@ -24,6 +25,9 @@ const store = new Vuex.Store({
     },
     dismissAll(state) {
       state.postList = [];
+    },
+    getPost(state,index) {
+      state.selectedPost = state.postList[index];
     },
   },
 });

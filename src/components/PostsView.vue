@@ -1,73 +1,80 @@
 <template>
-  <nav class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        {{ $t("sidebar.title") }}
-    </div>
-
-    <Loader/>
-
-    <ul class="list-posts">
-      <transition-group name="list-complete" tag="div">
-        <li v-for="(item, index) in postList" v-on:click="selectPost(item.data.id)"
-        :key="item.data.id" :id="item.data.id">
-          <div class="new-post"></div>
-          <div class="image-column">
-            <div class="post-image">
-              <img v-bind:src="item.data.thumbnail" alt="">
-            </div>
-            <button v-on:click="dismiss(index)" class="dismiss-single">
-              {{ $t("sidebar.dismiss_single") }}
-            </button>
-          </div>
-          <div class="info">
-            <div class="action">›</div>
-            <div class="author">
-              {{ item.data.author }}
-            </div>
-            <span class="posted">
-              {{ $t("sidebar.submitted") }} {{ item.data.created | moment("from") }}
-            </span>
-            <strong class="title">{{ item.data.title }}</strong>
-            <div class="row">
-              <div class="score">
-                <vue-material-icon name="arrow_upward" :size="14"></vue-material-icon>
-                <vue-material-icon name="arrow_downward" :size="14"></vue-material-icon>
-                <span>{{ item.data.score }}</span>
-              </div>
-              <div class="comments">
-                <vue-material-icon name="forum" :size="14"></vue-material-icon>
-                <span>{{ item.data.num_comments }} {{ $t("sidebar.comments") }}</span>
-              </div>
-            </div>
-          </div>
-        </li>
-      </transition-group>
-    </ul>
-
-    <div class="row">
-      <div class="paginate">
-          <p v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage)
-          < 3 || pageNumber == totalPages || pageNumber == 1" :key="pageNumber">
-          <a v-bind:key="pageNumber" href="#" @click="setPage(pageNumber)"
-          :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages
-          && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 &&
-          Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }}</a>
-          </p>
+  <div class="app">
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+          {{ $t("sidebar.title") }}
       </div>
-      <button href="javascript:;" v-on:click="dismissAll" class="dismiss-all">
-        {{ $t("sidebar.dismiss_all") }}
-      </button>
-    </div>
-  </nav>
+
+      <Loader/>
+
+      <ul class="list-posts">
+        <transition-group name="list-complete" tag="div">
+          <li v-for="(item, index) in postList" v-on:click="selectPost(index,item.data.id)"
+          :key="item.data.id" :id="item.data.id">
+            <div class="new-post"></div>
+            <div class="image-column">
+              <div class="post-image">
+                <img v-bind:src="item.data.thumbnail" alt="">
+              </div>
+              <button v-on:click="dismiss(index)" class="dismiss-single">
+                {{ $t("sidebar.dismiss_single") }}
+              </button>
+            </div>
+            <div class="info">
+              <div class="action">›</div>
+              <div class="author">
+                {{ item.data.author }}
+              </div>
+              <span class="posted">
+                {{ $t("sidebar.submitted") }} {{ item.data.created_utc | moment("from") }}
+              </span>
+              <strong class="title">{{ item.data.title }}</strong>
+              <div class="row">
+                <div class="score">
+                  <vue-material-icon name="arrow_upward" :size="14"></vue-material-icon>
+                  <vue-material-icon name="arrow_downward" :size="14"></vue-material-icon>
+                  <span>{{ item.data.score }}</span>
+                </div>
+                <div class="comments">
+                  <vue-material-icon name="forum" :size="14"></vue-material-icon>
+                  <span>{{ item.data.num_comments }} {{ $t("sidebar.comments") }}</span>
+                </div>
+              </div>
+            </div>
+          </li>
+        </transition-group>
+      </ul>
+
+      <div class="row">
+        <div class="paginate">
+            <p v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage)
+            < 3 || pageNumber == totalPages || pageNumber == 1" :key="pageNumber">
+            <a v-bind:key="pageNumber" href="#" @click="setPage(pageNumber)"
+            :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages
+            && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 &&
+            Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }}</a>
+            </p>
+        </div>
+        <button href="javascript:;" v-on:click="dismissAll" class="dismiss-all">
+          {{ $t("sidebar.dismiss_all") }}
+        </button>
+      </div>
+    </nav>
+
+    <PostContent/>
+
+  </div>
+
 </template>
 
 <script>
 
 import Loader from '@/components/Loader';
+import PostContent from '@/components/PostContent';
 
 export default {
-  name: 'SideList',
-  components: { Loader },
+  name: 'PostsView',
+  components: { Loader, PostContent },
   data() {
     return {
       currentPage: 1,
@@ -79,9 +86,13 @@ export default {
     this.$store.commit('init');
   },
   methods: {
-    selectPost(id) {
+    selectPost(index,id) {
+      console.log('index ',index);
+
       const postItem = document.getElementById(id).getElementsByClassName('new-post')[0];
       postItem.classList.add('checked');
+
+      selectPost(index);
 
       if (window.screen.availWidth <= 768) {
         const actionButton = document.getElementsByClassName('navbar-btn')[0];
@@ -95,6 +106,9 @@ export default {
     },
     dismissAll() {
       this.$store.commit('dismissAll');
+    },
+    selectPost(index) {
+      this.$store.commit('getPost', index);
     },
     setPage(pageNumber) {
       this.currentPage = pageNumber;
@@ -118,9 +132,6 @@ export default {
     },
   },
   computed: {
-    count() {
-      return this.$store.state.count;
-    },
     postList() {
       return this.$store.state.postList;
     },

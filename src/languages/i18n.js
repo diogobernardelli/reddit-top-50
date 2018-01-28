@@ -12,13 +12,22 @@ const messages = {
       dismiss_single: 'Dismiss Post',
       dismiss_all: 'Dismiss All',
     },
-    message: {
-      hello: 'hello world',
+    content: {
+      author: 'Posted by',
+      image_fullsize: 'view image full-size',
     },
   },
   pt: {
-    message: {
-      hello: 'Olá Mundo!',
+    sidebar: {
+      title: 'Top 50 Postagens do Reddit',
+      submitted: 'submetido',
+      comments: 'comentários',
+      dismiss_single: 'Excluir postagem',
+      dismiss_all: 'Excluir todos',
+    },
+    content: {
+      author: 'Postado por',
+      image_fullsize: 'ver imagem em tamanho completo',
     },
   },
 };

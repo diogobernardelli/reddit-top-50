@@ -1,22 +1,30 @@
 <template>
   <div class="wrapper">
     <div id="content">
-        <!-- <button type="button" class="navbar-btn" v-on:click="slideMenu" id="action_button">
+        <button type="button" class="navbar-btn" v-on:click="slideMenu" id="action_button">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <div class="title">
-          <span>Posted by <strong>washedupwornout</strong> - 25 hours ago</span>
-          <h1>Fixing a toilet leak. I took 2 trips to Home Depot, worked with a hernia,
-          had a pain in the ass time putting the wax ring and screws on...only to install
-        the toilet and forgetting about the door. I'm an idiot.</h1>
-        <h2>Macgyver</h2>
+        <div class="post" v-if="selectedPost">
+          <div class="title">
+            <span>{{ $t("content.author") }} <strong>{{ selectedPost.data.author }}</strong> - {{ selectedPost.data.created_utc | moment("from") }}</span>
+            <h1>{{ selectedPost.data.title }}</h1>
+          </div>
+          <div v-if="thumbnail">
+            <img v-bind:src="selectedPost.data.thumbnail">
+          </div>
+          <div v-else-if="selectedPost.data.preview">
+            <img v-bind:src="selectedPost.data.preview.images[0].source.url">
+          </div>
+          <a v-bind:href="selectedPost.data.preview.images[0].source.url" target="_blank" v-if="selectedPost.data.preview">
+            {{ $t("content.image_fullsize") }}
+          </a>
         </div>
-
-        <img src="http://i.imgur.com/IFtsInh.jpg" alt=""> -->
-        <img src="@/assets/placeholder-posts.png" alt="placeholder-posts" class="placeholder-posts">
+        <div v-else>
+          <img src="@/assets/placeholder-posts.png" alt="placeholder-posts" class="placeholder-posts">
+        </div>
 
     </div>
   </div>
@@ -25,12 +33,27 @@
 <script>
 export default {
   name: 'PostContent',
+  beforeMount() {
+    this.$store.commit('getPost');
+  },
   methods: {
     slideMenu() {
       const actionButton = document.getElementsByClassName('navbar-btn')[0];
       const sideBar = document.getElementById('sidebar');
       actionButton.classList.toggle('active');
       sideBar.classList.toggle('active');
+    },
+  },
+  computed: {
+    selectedPost() {
+      return this.$store.state.selectedPost;
+    },
+    thumbnail: function () {
+      if (this.selectedPost.data.thumbnail == "self" || this.selectedPost.data.thumbnail == "default" || this.selectedPost.data.thumbnail == "nsfw") {
+        return false;
+      } else {
+        return true;
+      }
     },
   },
 };
@@ -69,6 +92,17 @@ button {
   img {
     max-width: 100%;
     max-height: calc(100vh - 300px);
+  }
+}
+
+.post {
+  a {
+    display: block;
+    margin-top: 20px;
+    &:hover {
+      color: #fc471e;
+      text-decoration: none;
+    }
   }
 }
 .navbar-btn {
@@ -126,6 +160,9 @@ button {
     position: fixed;
     top: 15px;
     left: 15px;
+  }
+  .placeholder-posts {
+    width: 90%;
   }
 }
 </style>
