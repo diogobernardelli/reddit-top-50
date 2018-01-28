@@ -8,7 +8,6 @@ const messages = {
     sidebar: {
       title: 'Top 50 Reddit Posts',
       submitted: 'submitted',
-      time: 'ago',
       comments: 'comments',
       dismiss_single: 'Dismiss Post',
       dismiss_all: 'Dismiss All',

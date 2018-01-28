@@ -6,6 +6,7 @@ import VueMaterialIcon from 'vue-material-icon';
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import VueMoment from 'vue-moment';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 
@@ -18,6 +19,7 @@ Vue.use(VueAxios, axios);
 Vue.use(AsyncComputed);
 Vue.component(VueMaterialIcon.name, VueMaterialIcon);
 Vue.use(BootstrapVue);
+Vue.use(require('vue-moment'));
 
 Vue.config.productionTip = false;
 

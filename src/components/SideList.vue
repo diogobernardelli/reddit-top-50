@@ -25,7 +25,7 @@
               {{ item.data.author }}
             </div>
             <span class="posted">
-              {{ $t("sidebar.submitted") }} {{ item.data.created }} {{ $t("sidebar.time") }}
+              {{ $t("sidebar.submitted") }} {{ item.data.created | moment("from") }}
             </span>
             <strong class="title">{{ item.data.title }}</strong>
             <div class="row">
