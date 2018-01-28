@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div id="content">
-        <button type="button" class="navbar-btn" v-on:click="slideMenu" id="action_button">
+        <!-- <button type="button" class="navbar-btn" v-on:click="slideMenu" id="action_button">
             <span></span>
             <span></span>
             <span></span>
@@ -15,7 +15,9 @@
         <h2>Macgyver</h2>
         </div>
 
-        <img src="http://i.imgur.com/IFtsInh.jpg" alt="">
+        <img src="http://i.imgur.com/IFtsInh.jpg" alt=""> -->
+        <img src="@/assets/placeholder-posts.png" alt="placeholder-posts" class="placeholder-posts">
+
     </div>
   </div>
 </template>
@@ -101,6 +103,13 @@ button {
   transform: none;
   opacity: 1;
   margin: 5px auto;
+}
+.placeholder-posts {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
 }
 
 @media (max-width: 768px) {

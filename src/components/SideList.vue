@@ -4,6 +4,8 @@
         {{ $t("sidebar.title") }}
     </div>
 
+    <Loader/>
+
     <ul class="list-posts">
       <transition-group name="list-complete" tag="div">
         <li v-for="(item, index) in postList" v-on:click="selectPost(item.data.id)"
@@ -60,8 +62,12 @@
 </template>
 
 <script>
+
+import Loader from '@/components/Loader';
+
 export default {
   name: 'SideList',
+  components: { Loader },
   data() {
     return {
       currentPage: 1,
@@ -107,6 +113,9 @@ export default {
       }
       return this.postList.slice(index, index + this.itemsPerPage);
     },
+    hideLoader() {
+      document.getElementById('loader').style.display = 'none';
+    },
   },
   computed: {
     count() {
@@ -117,6 +126,7 @@ export default {
     },
   },
   updated() {
+    this.hideLoader();
     this.paginate();
   },
 };
@@ -181,6 +191,7 @@ export default {
     width: 100%;
     text-align: left;
     padding: 0 10px;
+    pointer-events: auto;
     cursor: pointer;
     border-bottom: 1px solid rgba(255, 255, 255, .06);
 
