@@ -22,16 +22,6 @@ Vue.use(require('vue-moment'));
 
 Vue.config.productionTip = false;
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').then(function (registration) {
-    // Registration Success
-    console.log('[serviceWorker]: registration successful with scope: ', registration.scope);
-  }).catch(function (err) {
-    // Registration failed :(
-    console.log('[serviceWorker] registration failed', err);
-  });
-}
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

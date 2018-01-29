@@ -5,10 +5,10 @@
     </div>
 
     <Loader/>
-
     <ul class="list-posts">
-      <transition-group name="list-complete" tag="div">
-        <li v-for="(item, index) in postList" v-on:click="selectPost(index,item.data.id)"
+      <!-- <transition-group name="list-complete" tag="div"> -->
+      <transition-group name="list-complete" tag="div" v-if="paginate.length > 0">
+        <li v-for="(item, index) in paginate" v-on:click="selectPost(index,item.data.id)"
         :key="item.data.id" :id="item.data.id">
           <div class="new-post"></div>
           <div class="image-column">
@@ -42,16 +42,20 @@
           </div>
         </li>
       </transition-group>
+      <transition-group name="list-complete" tag="div" v-else-if="noData">
+        <div class="no-posts" :key="1">
+          <h5>{{ $t("sidebar.no_posts") }}</h5>
+          <h6>{{ $t("sidebar.reload_page") }}</h6>
+        </div>
+      </transition-group>
+
     </ul>
 
     <div class="row">
       <div class="paginate">
-          <p v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage)
-          < 3 || pageNumber == totalPages || pageNumber == 1" :key="pageNumber">
+          <p v-for="pageNumber in totalPages" :key="pageNumber">
           <a v-bind:key="pageNumber" href="#" @click="setPage(pageNumber)"
-          :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages
-          && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 &&
-          Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }}</a>
+          :class="{current: currentPage === pageNumber}">{{ pageNumber }}</a>
           </p>
       </div>
       <button href="javascript:;" v-on:click="dismissAll" class="dismiss-all">
@@ -73,7 +77,8 @@ export default {
     return {
       currentPage: 1,
       itemsPerPage: 10,
-      resultCount: 0,
+      resultCount: 50,
+      noData: 0,
     };
   },
   beforeMount() {
@@ -91,28 +96,17 @@ export default {
       this.$store.commit('getPost', index);
     },
     dismiss(index) {
-      this.$store.commit('dismiss', index);
+      this.newCurrentPage();
+      const pageIndex = ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + index;
+      this.$store.commit('dismiss', pageIndex);
       this.mobileSlideSidebar();
     },
     dismissAll() {
       this.$store.commit('dismissAll');
+      this.noData = 1;
     },
     setPage(pageNumber) {
       this.currentPage = pageNumber;
-    },
-    totalPages() {
-      return Math.ceil(this.resultCount / this.itemsPerPage);
-    },
-    paginate() {
-      const index = (this.currentPage * this.itemsPerPage) - this.itemsPerPage;
-      if (!this.postList) {
-        return;
-      }
-      this.resultCount = this.postList.length;
-      if (this.currentPage >= this.totalPages) {
-        this.currentPage = this.totalPages;
-      }
-      return this.postList.slice(index, index + this.itemsPerPage);
     },
     hideLoader() {
       document.getElementById('loader').style.display = 'none';
@@ -125,15 +119,33 @@ export default {
         sideBar.classList.toggle('active');
       }
     },
+    newCurrentPage() {
+      if (this.currentPage === 0) {
+        this.currentPage = 1;
+      }
+    },
   },
   computed: {
     postList() {
       return this.$store.state.postList;
     },
+    totalPages() {
+      return Math.ceil(this.resultCount / this.itemsPerPage);
+    },
+    paginate() {
+      this.newCurrentPage();
+      let index = (this.currentPage * this.itemsPerPage) - this.itemsPerPage;
+      if (!this.postList) {
+        return;
+      }
+      if (index < 0) {
+        index = 0;
+      }
+      return this.postList.slice(index, index + this.itemsPerPage);
+    },
   },
   updated() {
     this.hideLoader();
-    this.paginate();
   },
 };
 </script>
@@ -148,6 +160,7 @@ export default {
   color: #fff;
   transition: all 0.6s cubic-bezier(0.945, 0.020, 0.270, 0.665);
   overflow-y: auto;
+  overflow-x: hidden;
   height: 100%;
   display: inline-block;
   float: left;
@@ -190,7 +203,7 @@ export default {
 
   li {
     position: relative;
-    transition: all 300ms ease-in-out;
+    transition: all 500ms cubic-bezier(0.87, -0.76, 0.06, 1.47);
     float: left;
     display: block;
     left: 0;
@@ -364,6 +377,21 @@ export default {
       text-decoration: none;
       background-color: #fd7259;
       color: #fff;
+    }
+  }
+
+  .no-posts {
+    transition: all 600ms ease-in-out;
+    transition-delay: 500ms;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+
+    h6 {
+      font-weight: 100;
+      font-size: 14px;
     }
   }
 }

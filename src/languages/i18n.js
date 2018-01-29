@@ -11,6 +11,8 @@ const messages = {
       comments: 'comments',
       dismiss_single: 'Dismiss Post',
       dismiss_all: 'Dismiss All',
+      no_posts: 'Looks like you ran out of posts :/',
+      reload_page: 'Reload this page and start over again.',
     },
     content: {
       author: 'Posted by',
@@ -24,6 +26,8 @@ const messages = {
       comments: 'comentários',
       dismiss_single: 'Excluir postagem',
       dismiss_all: 'Excluir todos',
+      no_posts: 'Aparentemente acabaram as postagems :/',
+      reload_page: 'Recarregue esta página e comece novamente.',
     },
     content: {
       author: 'Postado por',

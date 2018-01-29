@@ -11,9 +11,6 @@ const store = new Vuex.Store({
   },
 
   mutations: {
-    increment(state) {
-      state.count += 1;
-    },
     init(state) {
       const api = 'https://www.reddit.com/r/all/top.json?limit=50';
       Vue.axios.get(api).then((response) => {
@@ -25,6 +22,7 @@ const store = new Vuex.Store({
     },
     dismissAll(state) {
       state.postList = [];
+      state.selectedPost = null;
     },
     getPost(state, index) {
       state.selectedPost = null; // this will fix the delay between title and image
