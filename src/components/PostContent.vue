@@ -53,11 +53,13 @@ export default {
     },
     thumbnail() {
       const regex = 'http';
-      const thumbnail = this.selectedPost.data.thumbnail;
+      let thumbnail = this.selectedPost.data.thumbnail;
 
-      if (thumbnail.indexOf(regex) === 0) {
-        return true;
+      if (thumbnail.indexOf(regex) !== 0) {
+        thumbnail = '';
       }
+
+      return thumbnail;
     },
   },
 };

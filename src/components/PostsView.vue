@@ -108,6 +108,9 @@ export default {
     setPage(pageNumber) {
       this.currentPage = pageNumber;
     },
+    updateResultCount() {
+      this.resultCount = this.postList.length;
+    },
     hideLoader() {
       document.getElementById('loader').style.display = 'none';
     },
@@ -141,6 +144,7 @@ export default {
       if (index < 0) {
         index = 0;
       }
+      this.updateResultCount();
       return this.postList.slice(index, index + this.itemsPerPage);
     },
   },
