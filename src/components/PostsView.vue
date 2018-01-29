@@ -139,7 +139,7 @@ export default {
       this.newCurrentPage();
       let index = (this.currentPage * this.itemsPerPage) - this.itemsPerPage;
       if (!this.postList) {
-        return;
+        return false;
       }
       if (index < 0) {
         index = 0;
