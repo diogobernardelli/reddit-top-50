@@ -26,7 +26,8 @@ const store = new Vuex.Store({
     dismissAll(state) {
       state.postList = [];
     },
-    getPost(state,index) {
+    getPost(state, index) {
+      state.selectedPost = null; // this will fix the delay between title and image
       state.selectedPost = state.postList[index];
     },
   },

@@ -1,0 +1,21 @@
+{
+  "name": "Reddit Top 50",
+  "short_name": "RedditTop50",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#fc471e",
+  "background_color": "#f5f5f5",
+  "description": "Deviget Reddit Challenge - Diogo Bernardelli",
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "static/favicon.png",
+      "sizes": "72x72"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "web"
+    }
+  ]
+}

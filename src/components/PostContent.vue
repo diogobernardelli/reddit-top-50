@@ -9,7 +9,8 @@
 
         <div class="post" v-if="selectedPost">
           <div class="title">
-            <span>{{ $t("content.author") }} <strong>{{ selectedPost.data.author }}</strong> - {{ selectedPost.data.created_utc | moment("from") }}</span>
+            <span>{{ $t("content.author") }} <strong>{{ selectedPost.data.author }}
+            </strong> - {{ selectedPost.data.created_utc | moment("from") }}</span>
             <h1>{{ selectedPost.data.title }}</h1>
           </div>
           <div v-if="thumbnail">
@@ -18,12 +19,14 @@
           <div v-else-if="selectedPost.data.preview">
             <img v-bind:src="selectedPost.data.preview.images[0].source.url">
           </div>
-          <a v-bind:href="selectedPost.data.preview.images[0].source.url" target="_blank" v-if="selectedPost.data.preview">
+          <a v-if="selectedPost.data.preview"
+          v-bind:href="selectedPost.data.preview.images[0].source.url" target="_blank">
             {{ $t("content.image_fullsize") }}
           </a>
         </div>
         <div v-else>
-          <img src="@/assets/placeholder-posts.png" alt="placeholder-posts" class="placeholder-posts">
+          <img src="@/assets/placeholder-posts.png" alt="placeholder-posts"
+          class="placeholder-posts">
         </div>
 
     </div>
@@ -48,10 +51,11 @@ export default {
     selectedPost() {
       return this.$store.state.selectedPost;
     },
-    thumbnail: function () {
-      if (this.selectedPost.data.thumbnail == "self" || this.selectedPost.data.thumbnail == "default" || this.selectedPost.data.thumbnail == "nsfw") {
-        return false;
-      } else {
+    thumbnail() {
+      const regex = 'http';
+      const thumbnail = this.selectedPost.data.thumbnail;
+
+      if (thumbnail.indexOf(regex) === 0) {
         return true;
       }
     },
@@ -91,16 +95,23 @@ button {
 
   img {
     max-width: 100%;
+    min-width: 200px;
     max-height: calc(100vh - 300px);
   }
 }
 
 .post {
   a {
-    display: block;
+    display: inline-block;
     margin-top: 20px;
+    color: #fc471e;
+    padding: 4px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+
     &:hover {
-      color: #fc471e;
+      color: #ffffff;
+      background: #fc471e;
       text-decoration: none;
     }
   }

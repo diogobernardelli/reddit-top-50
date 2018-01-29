@@ -6,7 +6,6 @@ import VueMaterialIcon from 'vue-material-icon';
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-import VueMoment from 'vue-moment';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 
@@ -22,6 +21,16 @@ Vue.use(BootstrapVue);
 Vue.use(require('vue-moment'));
 
 Vue.config.productionTip = false;
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').then(function (registration) {
+    // Registration Success
+    console.log('[serviceWorker]: registration successful with scope: ', registration.scope);
+  }).catch(function (err) {
+    // Registration failed :(
+    console.log('[serviceWorker] registration failed', err);
+  });
+}
 
 /* eslint-disable no-new */
 new Vue({

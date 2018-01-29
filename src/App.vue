@@ -3,16 +3,18 @@
 <template>
   <div id="app">
     <PostsView/>
+    <PostContent/>
   </div>
 </template>
 
 <script>
 
 import PostsView from '@/components/PostsView';
+import PostContent from '@/components/PostContent';
 
 export default {
   name: 'App',
-  components: { PostsView },
+  components: { PostsView, PostContent },
 };
 </script>
 
@@ -23,12 +25,11 @@ export default {
 a {
   text-decoration: none
 }
-#app, .app {
+#app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
-  width: 100%;
   text-align: center;
   background-color: rgb(245,245,245);
   overflow: hidden;
