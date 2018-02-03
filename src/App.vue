@@ -1,20 +1,18 @@
-<link rel="icon" href="https://www.deviget.com/favicon.ico" type="image/x-icon" />
-<link rel="shortcut icon" href="https://www.deviget.com/favicon.ico" />
 <template>
   <div id="app">
-    <PostsView/>
+    <PostsList/>
     <PostContent/>
   </div>
 </template>
 
 <script>
 
-import PostsView from '@/components/PostsView';
+import PostsList from '@/components/PostsList';
 import PostContent from '@/components/PostContent';
 
 export default {
   name: 'App',
-  components: { PostsView, PostContent },
+  components: { PostsList, PostContent },
 };
 </script>
 

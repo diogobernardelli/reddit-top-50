@@ -6,7 +6,6 @@
 
     <Loader/>
     <ul class="list-posts">
-      <!-- <transition-group name="list-complete" tag="div"> -->
       <transition-group name="list-complete" tag="div" v-if="paginate.length > 0">
         <li v-for="(item, index) in paginate" v-on:click="selectPost(index,item.data.id)"
         :key="item.data.id" :id="item.data.id">
@@ -89,7 +88,8 @@ export default {
       const postItem = document.getElementById(id).getElementsByClassName('new-post')[0];
       postItem.classList.add('checked');
 
-      this.selectedPost(index);
+      let pageIndex = this.definePostIndex(index);
+      this.selectedPost(pageIndex);
       this.mobileSlideSidebar();
     },
     selectedPost(index) {
@@ -97,13 +97,16 @@ export default {
     },
     dismiss(index) {
       this.newCurrentPage();
-      const pageIndex = ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + index;
+      let pageIndex = this.definePostIndex(index);
       this.$store.commit('dismiss', pageIndex);
       this.mobileSlideSidebar();
     },
     dismissAll() {
       this.$store.commit('dismissAll');
       this.noData = 1;
+    },
+    definePostIndex(index) {
+      return ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + index;
     },
     setPage(pageNumber) {
       this.currentPage = pageNumber;
@@ -420,14 +423,6 @@ export default {
       background: #fc471e;
       color: #fff;
     }
-
-    &.first::after {
-      content:' ... '
-    }
-
-    &.last::before {
-      content:' ... '
-    }
   }
   .current {
     color: #fff;
@@ -447,10 +442,6 @@ export default {
     width: 100%;
     min-width: 100%;
     max-width: 100%;
-
-    &.mobile-active {
-      margin: 0 0 0 -100%;
-    }
   }
   .sidebar.active {
     margin-left: -100%;
