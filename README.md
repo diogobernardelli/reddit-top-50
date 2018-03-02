@@ -1,6 +1,6 @@
 # REDDIT TOP 50
 
-> Deviget Reddit Challenge - Diogo Bernardelli
+> Reddit Top 50 Posts (VueJS proof of concept) - Diogo Bernardelli
 
 ## Download / Clone project
 
