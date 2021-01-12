@@ -88,7 +88,7 @@ export default {
       const postItem = document.getElementById(id).getElementsByClassName('new-post')[0];
       postItem.classList.add('checked');
 
-      let pageIndex = this.definePostIndex(index);
+      const pageIndex = this.definePostIndex(index);
       this.selectedPost(pageIndex);
       this.mobileSlideSidebar();
     },
@@ -97,7 +97,7 @@ export default {
     },
     dismiss(index) {
       this.newCurrentPage();
-      let pageIndex = this.definePostIndex(index);
+      const pageIndex = this.definePostIndex(index);
       this.$store.commit('dismiss', pageIndex);
       this.mobileSlideSidebar();
     },
